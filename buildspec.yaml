@@ -12,6 +12,7 @@ phases:
     commands:
       - echo Entered the pre build phase...
       - cd functions/sample-function
+      - ls -lat
       - npm init -y
       - npm install -y
       - ls -lat
