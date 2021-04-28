@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Test for Lambda Layers
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
+  CodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codepipeline.amazonaws.com
+            - codebuild.amazonaws.com
+            - codedeploy.amazonaws.com
+            - s3.amazonaws.com
+            - cloudformation.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action: '*'
+            Resource: '*'
+  AppCodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      ServiceRole:
+        Fn::GetAtt:
+        - CodePipelineServiceRole
+        - Arn
+      Cache:
+        Type: S3
+        Location:
+          Fn::Join:
+          - /
+          - - Ref: ArtifactBucket
+            - projectcache
+      Artifacts:
+        Type: CODEPIPELINE
+        Location:
+          Ref: ArtifactBucket
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:2.0
+        PrivilegedMode: true
+      Source:
+        Type: CODEPIPELINE
+      TimeoutInMinutes: 15
+      LogsConfig:
+        CloudWatchLogs:
+          GroupName: tier-2-challenge-build-log-group
+          Status: ENABLED
+  CodeStarConnection:
+    Type: AWS::CodeStarConnections::Connection
+    Properties:
+      ConnectionName: GitHubToPipelineConnection
+      ProviderType: GitHub

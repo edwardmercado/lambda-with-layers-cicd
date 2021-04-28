@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Test for Lambda Layers"
+Transform: 'AWS::Serverless-2016-10-31'
+
+Globals:
+    Function:
+        Timeout: 3
+        Runtime: nodejs10.x
+
+Resources:
+    SampleFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: functions/
+            Handler: app.handler
+            Layers:
+                - !Ref FunctionLayer
+            
+    FunctionLayer:
+        Type: AWS::Serverless::LayerVersion
+        Properties:
+            LayerName: sample-app-dependencies
+            ContentUri: dependencies/
+            CompatibleRuntimes:
+                - nodejs10.x
+            LicenseInfo: MIT
+
+            

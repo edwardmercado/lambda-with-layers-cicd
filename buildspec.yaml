@@ -1,0 +1,43 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: latest
+    commands:
+      - echo Entered the installing phase...
+    finally:
+      - echo This always runs even if the update or install command fails 
+  pre_build:
+    commands:
+      - echo Entered the pre build phase...
+    finally: 
+      - echo This always runs even if the pre build phase commands fails
+  build:
+    commands:
+      - echo Entered the build phase...
+      - echo Build started on `date`
+    finally: 
+      - echo This always runs even if the build phase commands fails
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Entered the post_build phase...
+      
+
+# artifacts:
+#   files:
+#     - package.json
+#     - Procfile
+#     - src/index.js
+#     - src/middlewares.js
+#     - node_modules/**/*
+#     - .eslintrc.js
+#     - package-lock.json
+#     - .env
+#   name: express-miniapp
+#   base-directory: express-miniapp
+
+# cache:
+#   paths:
+#     - node_modules/**/*
