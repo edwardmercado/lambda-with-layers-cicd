@@ -34,4 +34,9 @@ Resources:
                 - nodejs10.x
             LicenseInfo: MIT
 
-            
+Outputs:
+    SampleFunctionName:
+        Description: GPSConnect-Bytes-ARN
+        Value: !Ref SampleFunction
+        Export:
+            Name: SampleFunctionNameExport

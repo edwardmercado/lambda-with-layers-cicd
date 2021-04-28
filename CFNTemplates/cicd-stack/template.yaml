@@ -118,12 +118,12 @@ Resources:
                   - 
                     Name: sample-app-build
                 ActionTypeId: 
-                  Category: Deploy
+                  Category: Invoke
                   Owner: AWS 
                   Version: 1
-                  Provider: S3 
+                  Provider: Lambda 
                 Configuration: 
-                  BucketName: !Ref ImageBucket
+                  FunctionName: myLambdaFunction
                   Extract: false
                   ObjectKey: containerImage.zip
                 RunOrder: 1
