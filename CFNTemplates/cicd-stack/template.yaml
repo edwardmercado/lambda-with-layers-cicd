@@ -109,23 +109,5 @@ Resources:
                   ProjectName: !Ref AppCodeBuildProject
                   PrimarySource: sample-app
                 RunOrder: 1 
-          - 
-            Name: Release 
-            Actions: 
-              - 
-                Name: DeployAction
-                InputArtifacts: 
-                  - 
-                    Name: sample-app-build
-                ActionTypeId: 
-                  Category: Invoke
-                  Owner: AWS 
-                  Version: 1
-                  Provider: Lambda 
-                Configuration: 
-                  FunctionName: myLambdaFunction
-                  Extract: false
-                  ObjectKey: containerImage.zip
-                RunOrder: 1
 
             

@@ -12,6 +12,7 @@ phases:
     commands:
       - echo Entered the pre build phase...
       - cd functions/sample-function
+      - npm init -y
       - npm install -y
       - ls -lat
       - mv package* node_modules/ node_modules/* ../../dependencies/nodejs
@@ -32,7 +33,7 @@ phases:
       
 artifacts:
   files:
-    - "packaged-template.yaml"
+    - "./CFNTemplates/lambda-stack/packaged-template.yaml"
 
 # artifacts:
 #   files:
