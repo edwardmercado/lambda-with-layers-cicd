@@ -82,10 +82,10 @@ Resources:
                   Provider: CodeStarSourceConnection          
                 OutputArtifacts: 
                   - 
-                    Name: express-miniapp
+                    Name: sample-app
                 Configuration: 
                   ConnectionArn: !GetAtt CodeStarConnection.ConnectionArn
-                  FullRepositoryId: edwardmercado/mercado-devops-challenge-tier-2
+                  FullRepositoryId: edwardmercado/test
                   BranchName: main
                   OutputArtifactFormat: CODEBUILD_CLONE_REF
                 RunOrder: 1 
@@ -96,10 +96,10 @@ Resources:
                 Name: BuildAction 
                 InputArtifacts: 
                   -
-                    Name: express-miniapp
+                    Name: sample-app
                 OutputArtifacts:
                   - 
-                    Name: express-miniapp-run
+                    Name: sample-app-build
                 ActionTypeId: 
                   Category: Build 
                   Owner: AWS
@@ -107,25 +107,25 @@ Resources:
                   Provider: CodeBuild
                 Configuration: 
                   ProjectName: !Ref AppCodeBuildProject
-                  PrimarySource: express-miniapp
+                  PrimarySource: sample-app
                 RunOrder: 1 
-          # - 
-          #   Name: Release 
-          #   Actions: 
-          #     - 
-          #       Name: ReleaseAction
-          #       InputArtifacts: 
-          #         - 
-          #           Name: express-miniapp-run
-          #       ActionTypeId: 
-          #         Category: Deploy
-          #         Owner: AWS 
-          #         Version: 1
-          #         Provider: S3 
-          #       Configuration: 
-          #         BucketName: !Ref ImageBucket
-          #         Extract: false
-          #         ObjectKey: containerImage.zip
-          #       RunOrder: 1
+          - 
+            Name: Release 
+            Actions: 
+              - 
+                Name: DeployAction
+                InputArtifacts: 
+                  - 
+                    Name: sample-app-build
+                ActionTypeId: 
+                  Category: Deploy
+                  Owner: AWS 
+                  Version: 1
+                  Provider: S3 
+                Configuration: 
+                  BucketName: !Ref ImageBucket
+                  Extract: false
+                  ObjectKey: containerImage.zip
+                RunOrder: 1
 
             

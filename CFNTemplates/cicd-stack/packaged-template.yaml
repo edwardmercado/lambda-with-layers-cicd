@@ -57,10 +57,58 @@ Resources:
       TimeoutInMinutes: 15
       LogsConfig:
         CloudWatchLogs:
-          GroupName: tier-2-challenge-build-log-group
+          GroupName: sample-lambda-app-build-log-group
           Status: ENABLED
   CodeStarConnection:
     Type: AWS::CodeStarConnections::Connection
     Properties:
       ConnectionName: GitHubToPipelineConnection
       ProviderType: GitHub
+  AppPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Location:
+          Ref: ArtifactBucket
+        Type: S3
+      RoleArn:
+        Fn::GetAtt:
+        - CodePipelineServiceRole
+        - Arn
+      Stages:
+      - Name: Source
+        Actions:
+        - Name: SourceAction
+          ActionTypeId:
+            Category: Source
+            Owner: AWS
+            Version: '1'
+            Provider: CodeStarSourceConnection
+          OutputArtifacts:
+          - Name: sample-app
+          Configuration:
+            ConnectionArn:
+              Fn::GetAtt:
+              - CodeStarConnection
+              - ConnectionArn
+            FullRepositoryId: edwardmercado/test
+            BranchName: main
+            OutputArtifactFormat: CODEBUILD_CLONE_REF
+          RunOrder: 1
+      - Name: Build
+        Actions:
+        - Name: BuildAction
+          InputArtifacts:
+          - Name: sample-app
+          OutputArtifacts:
+          - Name: sample-app-build
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Version: 1
+            Provider: CodeBuild
+          Configuration:
+            ProjectName:
+              Ref: AppCodeBuildProject
+            PrimarySource: sample-app
+          RunOrder: 1
