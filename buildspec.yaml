@@ -11,12 +11,15 @@ phases:
   pre_build:
     commands:
       - echo Entered the pre build phase...
+      - npm config -g set prefer-offline true
+      - npm config -g set cache /root/.npm
+      - npm ci
       - cd functions/sample-function
       - ls -lat
       - npm init -y
       - npm install -y
       - ls -lat
-      - mv package* node_modules/ node_modules/* ../../dependencies/nodejs
+      - mv package* node_modules* ../../dependencies/nodejs
     finally: 
       - echo This always runs even if the pre build phase commands fails
   build:
@@ -49,6 +52,7 @@ artifacts:
 #   name: express-miniapp
 #   base-directory: express-miniapp
 
-# cache:
-#   paths:
-#     - node_modules/**/*
+cache:
+  paths:
+    - '/root/.npm-cache/**/*'
+    - 'node_modules/**/*'
