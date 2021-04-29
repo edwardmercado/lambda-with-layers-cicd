@@ -17,9 +17,9 @@ phases:
       - cd functions/sample-function
       - ls -lat
       - npm init -y
-      - npm install && npm run build
+      - npm install ../../dependencies/nodejs
       - ls -lat
-      - mv package* node_modules* ../../dependencies/nodejs
+      - mv package* ../../dependencies/nodejs
     finally: 
       - echo This always runs even if the pre build phase commands fails
   build:
@@ -39,20 +39,6 @@ artifacts:
   files:
     - "./CFNTemplates/lambda-stack/packaged-template.yaml"
 
-# artifacts:
-#   files:
-#     - package.json
-#     - Procfile
-#     - src/index.js
-#     - src/middlewares.js
-#     - node_modules/**/*
-#     - .eslintrc.js
-#     - package-lock.json
-#     - .env
-#   name: express-miniapp
-#   base-directory: express-miniapp
-
 cache:
-  paths:
-    - '/root/.npm-cache/**/*'
-    - 'node_modules/**/*'
+  files:
+    - '**/*'
