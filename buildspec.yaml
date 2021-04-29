@@ -6,7 +6,7 @@ phases:
       nodejs: latest
     commands:
       - echo Entered the installing phase...
-      - apt install rsync -y
+      - sudo apt install rsync -y
     finally:
       - echo This always runs even if the update or install command fails 
   pre_build:
