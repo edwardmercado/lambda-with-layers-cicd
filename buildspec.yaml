@@ -1,5 +1,8 @@
 version: 0.2
 
+env:
+  shell: bash
+
 phases:
   install:
     runtime-versions:
@@ -15,6 +18,7 @@ phases:
       - npm prune
       - ls -lat
       - [ -d "dependencies/nodejs" ] &&  rm -rf dependencies/nodejs
+      - if 
       - mkdir -p dependencies/nodejs
       - cd functions/sample-function
       - ls -lat
