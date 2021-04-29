@@ -11,13 +11,13 @@ phases:
   pre_build:
     commands:
       - echo Entered the pre build phase...
-      - npm config -g set prefer-offline true
-      - npm config -g set cache /root/.npm
-      - npm ci
+      # - npm config -g set prefer-offline true
+      # - npm config -g set cache /root/.npm
+      # - npm ci
       - cd functions/sample-function
       - ls -lat
       - npm init -y
-      - npm install -y
+      - npm install && npm run build
       - ls -lat
       - mv package* node_modules* ../../dependencies/nodejs
     finally: 
