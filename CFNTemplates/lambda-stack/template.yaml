@@ -17,7 +17,7 @@ Resources:
     SampleFunction:
         Type: AWS::Serverless::Function
         Properties:
-            CodeUri: ../functions/sample-function
+            CodeUri: ../../functions/sample-function
             Handler: app.handler
             Layers:
                 - !Ref FunctionLayer
