@@ -43,7 +43,8 @@ phases:
       
 artifacts:
   files:
-    - "../../CFNTemplates/lambda-stack/packaged-template.yaml"
+    - "packaged-template.yaml"
+  base-directory: CFNTemplates/lambda-stack
 
 cache:
   files:
