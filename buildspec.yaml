@@ -16,10 +16,10 @@ phases:
       - mkdir -p dependencies/nodejs
       - cd functions/sample-function
       - ls -lat
-      - npm install
+      - npm install ../../dependencies/nodejs/
       # - pwd
       - ls -lat
-      - mv package* node_modules* ../../dependencies/nodejs/
+      - mv package* ../../dependencies/nodejs/
       - ls -lat ../../dependencies/nodejs/
     finally: 
       - echo This always runs even if the pre build phase commands fails
