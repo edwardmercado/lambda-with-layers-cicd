@@ -17,9 +17,11 @@ phases:
       - cd functions/sample-function
       - ls -lat
       - npm init -y
-      - npm install ../../dependencies/nodejs
+      - npm install
+      - pwd
       - ls -lat
-      - mv package* ../../dependencies/nodejs
+      - mv package* node_modules* ../../dependencies/nodejs
+      - ls -lat ../../dependencies/nodejs
     finally: 
       - echo This always runs even if the pre build phase commands fails
   build:
@@ -33,6 +35,7 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Entered the post_build phase...
+      - pwd
       - sam deploy --template-file ./CFNTemplates/lambda-stack/template.yaml --stack-name sample-lambda-layer-stack --capabilities CAPABILITY_IAM --region ap-southeast-1
       
 artifacts:
