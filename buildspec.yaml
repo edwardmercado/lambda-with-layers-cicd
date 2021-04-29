@@ -40,14 +40,10 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Entered the post_build phase...
-      # - pwd
-      # - sam deploy --template-file ./CFNTemplates/lambda-stack/template.yaml --stack-name sample-lambda-layer-stack --capabilities CAPABILITY_IAM --region ap-southeast-1
       
 artifacts:
   files:
     - "../../CFNTemplates/lambda-stack/packaged-template.yaml"
-  base-directory: build
-  name: $timestamp.zip
 
 cache:
   files:
