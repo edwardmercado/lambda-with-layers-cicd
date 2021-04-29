@@ -11,9 +11,7 @@ phases:
   pre_build:
     commands:
       - echo Entered the pre build phase...
-      # - npm config -g set prefer-offline true
-      # - npm config -g set cache /root/.npm
-      # - npm ci
+      - ls -lat
       - cd functions/sample-function
       - ls -lat
       - npm install
@@ -34,8 +32,8 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Entered the post_build phase...
-      - pwd
-      - sam deploy --template-file ./CFNTemplates/lambda-stack/template.yaml --stack-name sample-lambda-layer-stack --capabilities CAPABILITY_IAM --region ap-southeast-1
+      # - pwd
+      # - sam deploy --template-file ./CFNTemplates/lambda-stack/template.yaml --stack-name sample-lambda-layer-stack --capabilities CAPABILITY_IAM --region ap-southeast-1
       
 artifacts:
   files:
