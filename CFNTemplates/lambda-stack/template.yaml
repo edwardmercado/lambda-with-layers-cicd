@@ -29,7 +29,7 @@ Resources:
         Type: AWS::Serverless::LayerVersion
         Properties:
             LayerName: sample-app-dependencies
-            ContentUri: dependencies/
+            ContentUri: "../../dependencies"
             CompatibleRuntimes:
                 - nodejs10.x
             LicenseInfo: MIT
