@@ -18,7 +18,7 @@ phases:
       - ls -lat
       - npm init -y
       - npm install
-      - pwd
+      # - pwd
       - ls -lat
       - mv package* node_modules* ../../dependencies/nodejs
       - ls -lat ../../dependencies/nodejs
