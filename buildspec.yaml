@@ -6,6 +6,7 @@ phases:
       nodejs: latest
     commands:
       - echo Entered the installing phase...
+      - yum install rsync -y
     finally:
       - echo This always runs even if the update or install command fails 
   pre_build:
@@ -19,7 +20,9 @@ phases:
       - npm install
       # - pwd
       - ls -lat
-      - mv -uf package* node_modules ../../dependencies/nodejs
+      # - mv -uf package* node_modules ../../dependencies/nodejs
+      - rsync -a package* node_modules/ ../../dependencies/nodejs/
+      - rm -rf node_modules/*
       - ls -lat ../../dependencies/nodejs
     finally: 
       - echo This always runs even if the pre build phase commands fails
