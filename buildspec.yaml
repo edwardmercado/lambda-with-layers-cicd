@@ -22,8 +22,8 @@ phases:
       # - pwd
       - ls -lat
       # - mv -uf package* node_modules ../../dependencies/nodejs
-      - rsync -a package* node_modules/ ../../dependencies/nodejs/
-      - rm -rf node_modules/*
+      - rsync -a package* node_modules* ../../dependencies/nodejs/
+      - rm -rf node_modules/
       - ls -lat ../../dependencies/nodejs
     finally: 
       - echo This always runs even if the pre build phase commands fails
