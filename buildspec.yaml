@@ -11,6 +11,7 @@ phases:
   pre_build:
     commands:
       - echo Entered the pre build phase...
+      - npm prune
       - ls -lat
       - mkdir -p dependencies/nodejs
       - cd functions/sample-function
