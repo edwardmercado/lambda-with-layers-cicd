@@ -26,7 +26,7 @@ phases:
     commands:
       - echo Entered the build phase...
       - echo Build started on `date`
-      - sam package --template-file ./CFNTemplates/lambda-stack/template.yaml --output-template-file ./CFNTemplates/lambda-stack/packaged-template.yaml --region ap-southeast-1 --resolve-s3 
+      - sam package --template-file ../../CFNTemplates/lambda-stack/template.yaml --output-template-file ./CFNTemplates/lambda-stack/packaged-template.yaml --region ap-southeast-1 --resolve-s3 
     finally: 
       - echo This always runs even if the build phase commands fails
   post_build:
@@ -38,10 +38,10 @@ phases:
       
 artifacts:
   files:
-    - "./CFNTemplates/lambda-stack/packaged-template.yaml"
+    - "../../CFNTemplates/lambda-stack/template.yaml"
+  base-directory: build
+  name: $timestamp.zip
 
 cache:
   files:
     - '**/*'
-  base-directory: build
-  name: $timestamp.zip
