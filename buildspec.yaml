@@ -25,6 +25,7 @@ phases:
       # - pwd
       - ls -lat
       # - mv -uf package* node_modules ../../dependencies/nodejs
+      # prepare dependencies for lambda layers
       - rsync -a package* node_modules* ../../dependencies/nodejs/
       - rm -rf node_modules/
     finally: 
@@ -33,6 +34,13 @@ phases:
     commands:
       - echo Entered the build phase...
       - echo Build started on `date`
+      
+      #package layers
+      - sam package --template-file ../../CFNTemplates/lambda-layer-stack/template.yaml --output-template-file ../../CFNTemplates/lambda-layer-stack/packaged-template.yaml --region ap-southeast-1 --resolve-s3
+      #deploy layers
+      - sam deploy --template-file ../../CFNTemplates/lambda-layer-stack/packaged-template.yaml --stack-name samplelambdalayer --capabilities CAPABILITY_IAM --region ap-southeast-1
+      
+      #package lambda function
       - sam package --template-file ../../CFNTemplates/lambda-stack/template.yaml --output-template-file ../../CFNTemplates/lambda-stack/packaged-template.yaml --region ap-southeast-1 --resolve-s3 
     finally: 
       - echo This always runs even if the build phase commands fails
