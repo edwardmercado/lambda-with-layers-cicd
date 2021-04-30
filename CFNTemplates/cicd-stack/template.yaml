@@ -10,7 +10,7 @@ Parameters:
     # MaxLength: 20
     # MinLength: 2
     Type: String
-    Default: "sample-lambda-layer-stack"
+    Default: "samplelambdastack"
 
 Resources:
     ArtifactBucket:
@@ -123,7 +123,7 @@ Resources:
             Name: Deploy 
             Actions: 
               - 
-                Name: Generate ChangeSet
+                Name: GenerateChangeSet
                 InputArtifacts: 
                   -
                     Name: sample-app-build
@@ -136,11 +136,12 @@ Resources:
                   Version: 1 
                   Provider: CloudFormation
                 Configuration: 
-                  ProjectName: !Ref AppCodeBuildProject
+                  # ProjectName: !Ref AppCodeBuildProject
                   ActionMode: CHANGE_SET_REPLACE
                   Capabilities: CAPABILITY_NAMED_IAM
                   ChangeSetName: pipeline-changeset
-                  StackName: "sample-lambda-layer-stack"
-                  TemplatePath: sample-app-build::template-export.yml
+                  StackName: "samplelambdastack"
+                  TemplatePath: sample-app-build::packaged-template.yaml
+                  RoleArn: !Ref CodePipelineServiceRole
                 RunOrder: 1 
             
