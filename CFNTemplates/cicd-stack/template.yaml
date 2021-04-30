@@ -138,7 +138,7 @@ Resources:
                     ActionMode: CHANGE_SET_REPLACE
                     Capabilities: CAPABILITY_NAMED_IAM
                     ChangeSetName: pipeline-changeset
-                    StackName: "samplelambdastack"
+                    StackName: !Ref LambdaStackName
                     TemplatePath: sample-app-build::packaged-template.yaml
                     RoleArn: !GetAtt CodePipelineServiceRole.Arn
                   RunOrder: 1
@@ -151,7 +151,7 @@ Resources:
                   Configuration:
                     ActionMode: CHANGE_SET_EXECUTE
                     ChangeSetName: pipeline-changeset
-                    StackName: "samplelambdastack"
+                    StackName: !Ref LambdaStackName
                   RunOrder: 2
                   Name: ExecuteChangeSet
             
