@@ -5,19 +5,26 @@ Globals:
   Function:
     Timeout: 3
     Runtime: nodejs10.x
+Parameters:
+  Environment:
+    Description: Choose Environment where to deploy
+    Type: String
+    Default: dev
 Resources:
   SampleFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://aws-sam-cli-managed-default-samclisourcebucket-tksk8swudggr/24c85ed0234b8cebb6f0d2e4e8d83949
+      CodeUri: s3://aws-sam-cli-managed-default-samclisourcebucket-1p8e7t1vav6d4/ed0e8c3a9e6ba31316b62c038c1fa8ec
       Handler: app.handler
       Layers:
-      - Ref: FunctionLayer
-  FunctionLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: sample-app-dependencies
-      ContentUri: s3://aws-sam-cli-managed-default-samclisourcebucket-tksk8swudggr/1c64f0a4d73f5e0b1b0a48ca44874d18
-      CompatibleRuntimes:
-      - nodejs10.x
-      LicenseInfo: MIT
+      - Fn::Import: FunctionLayerNameExport
+      AutoPublishAlias:
+        Ref: Environment
+      DeploymentPreference:
+        Type: Canary10Percent5Minutes
+Outputs:
+  SampleFunctionName:
+    Value:
+      Ref: SampleFunction
+    Export:
+      Name: SampleFunctionNameExport

@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Test for Lambda Layers
 Transform: AWS::Serverless-2016-10-31
+Parameters:
+  LambdaStackName:
+    Type: String
+    Default: sample-lambda-layer-stack
 Resources:
   ArtifactBucket:
     Type: AWS::S3::Bucket
@@ -111,4 +115,23 @@ Resources:
             ProjectName:
               Ref: AppCodeBuildProject
             PrimarySource: sample-app
+          RunOrder: 1
+      - Name: Deploy
+        Actions:
+        - Name: Generate ChangeSet
+          InputArtifacts:
+          - Name: sample-app-build
+          ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Version: 1
+            Provider: CloudFormation
+          Configuration:
+            ProjectName:
+              Ref: AppCodeBuildProject
+            ActionMode: CHANGE_SET_REPLACE
+            Capabilities: CAPABILITY_NAMED_IAM
+            ChangeSetName: pipeline-changeset
+            StackName: sample-lambda-layer-stack
+            TemplatePath: sample-app-build::template-export.yml
           RunOrder: 1

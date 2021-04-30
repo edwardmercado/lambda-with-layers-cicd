@@ -20,23 +20,13 @@ Resources:
             CodeUri: "../../functions/sample-function"
             Handler: app.handler
             Layers:
-                - !Ref FunctionLayer
+                - !Import FunctionLayerNameExport
             AutoPublishAlias: !Ref Environment
             DeploymentPreference:
                 Type: Canary10Percent5Minutes
-            
-    FunctionLayer:
-        Type: AWS::Serverless::LayerVersion
-        Properties:
-            LayerName: sample-app-dependencies
-            ContentUri: "../../dependencies"
-            CompatibleRuntimes:
-                - nodejs10.x
-            LicenseInfo: MIT
 
 Outputs:
     SampleFunctionName:
-        Description: GPSConnect-Bytes-ARN
         Value: !Ref SampleFunction
         Export:
             Name: SampleFunctionNameExport
