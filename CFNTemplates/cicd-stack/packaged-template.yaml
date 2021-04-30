@@ -118,14 +118,13 @@ Resources:
           RunOrder: 1
       - Name: Deploy
         Actions:
-        - Name: GenerateChangeSet
-          InputArtifacts:
-          - Name: sample-app-build
-          ActionTypeId:
+        - ActionTypeId:
             Category: Deploy
             Owner: AWS
             Version: 1
             Provider: CloudFormation
+          InputArtifacts:
+          - Name: sample-app-build
           Configuration:
             ActionMode: CHANGE_SET_REPLACE
             Capabilities: CAPABILITY_NAMED_IAM
@@ -133,5 +132,19 @@ Resources:
             StackName: samplelambdastack
             TemplatePath: sample-app-build::packaged-template.yaml
             RoleArn:
-              Ref: CodePipelineServiceRole
+              Fn::GetAtt:
+              - CodePipelineServiceRole
+              - Arn
           RunOrder: 1
+          Name: GenerateChangeSet
+        - ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Version: 1
+            Provider: CloudFormation
+          Configuration:
+            ActionMode: CHANGE_SET_EXECUTE
+            ChangeSetName: pipeline-changeset
+            StackName: samplelambdastack
+          RunOrder: 2
+          Name: ExecuteChangeSet
