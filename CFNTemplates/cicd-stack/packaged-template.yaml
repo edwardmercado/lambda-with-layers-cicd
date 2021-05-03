@@ -8,6 +8,12 @@ Parameters:
 Resources:
   ArtifactBucket:
     Type: AWS::S3::Bucket
+  ApprovalSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+      - Endpoint: edwardallenlearning@gmail.com
+        Protocol: email
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -116,7 +122,7 @@ Resources:
               Ref: AppCodeBuildProject
             PrimarySource: sample-app
           RunOrder: 1
-      - Name: Deploy
+      - Name: Deploy-Dev
         Actions:
         - ActionTypeId:
             Category: Deploy
@@ -129,14 +135,18 @@ Resources:
             ActionMode: CHANGE_SET_REPLACE
             Capabilities: CAPABILITY_NAMED_IAM
             ChangeSetName: pipeline-changeset
-            StackName: samplelambdastack
+            StackName:
+              Fn::Join:
+              - ''
+              - - Ref: LambdaStackName
+                - -DEV
             TemplatePath: sample-app-build::packaged-template.yaml
             RoleArn:
               Fn::GetAtt:
               - CodePipelineServiceRole
               - Arn
           RunOrder: 1
-          Name: GenerateChangeSet
+          Name: Generate-Change-Set-To-Dev
         - ActionTypeId:
             Category: Deploy
             Owner: AWS
@@ -145,6 +155,64 @@ Resources:
           Configuration:
             ActionMode: CHANGE_SET_EXECUTE
             ChangeSetName: pipeline-changeset
-            StackName: samplelambdastack
+            StackName:
+              Fn::Join:
+              - ''
+              - - Ref: LambdaStackName
+                - -DEV
           RunOrder: 2
-          Name: ExecuteChangeSet
+          Name: Execute-Change-Set-To-Dev
+      - Name: Review
+        Actions:
+        - Name: Review-Changes
+          ActionTypeId:
+            Category: Approval
+            Owner: AWS
+            Version: 1
+            Provider: Manual
+          Configuration:
+            CustomData: Review changes for PROD deployments
+            NotificationArn:
+              Ref: ApprovalSNSTopic
+          RunOrder: 1
+      - Name: Deploy-Prod
+        Actions:
+        - ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Version: 1
+            Provider: CloudFormation
+          InputArtifacts:
+          - Name: sample-app-build
+          Configuration:
+            ActionMode: CHANGE_SET_REPLACE
+            Capabilities: CAPABILITY_NAMED_IAM
+            ChangeSetName: pipeline-changeset
+            StackName:
+              Fn::Join:
+              - ''
+              - - Ref: LambdaStackName
+                - -PROD
+            TemplatePath: sample-app-build::packaged-template.yaml
+            RoleArn:
+              Fn::GetAtt:
+              - CodePipelineServiceRole
+              - Arn
+            ParameterOverrides: "{\n  \"Environment\" : \"prod\"\n}\n"
+          RunOrder: 1
+          Name: Generate-Change-Set-To-PROD
+        - ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Version: 1
+            Provider: CloudFormation
+          Configuration:
+            ActionMode: CHANGE_SET_EXECUTE
+            ChangeSetName: pipeline-changeset
+            StackName:
+              Fn::Join:
+              - ''
+              - - Ref: LambdaStackName
+                - -PROD
+          RunOrder: 2
+          Name: Execute-Change-Set-to-PROD

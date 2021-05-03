@@ -15,6 +15,13 @@ Parameters:
 Resources:
     ArtifactBucket:
       Type: AWS::S3::Bucket
+      
+    ApprovalSNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        Subscription:
+          - Endpoint: edwardallenlearning@gmail.com
+            Protocol: email
         
     
     CodePipelineServiceRole:
@@ -120,11 +127,32 @@ Resources:
                   PrimarySource: sample-app
                 RunOrder: 1 
           - 
-            Name: Deploy 
+            Name: Deploy-Dev
             Actions: 
                 # OutputArtifacts:
                 #   - 
                 #     Name: sample-app-build
+                # - ActionTypeId: 
+                #     Category: Deploy 
+                #     Owner: AWS
+                #     Version: 1 
+                #     Provider: CloudFormation
+                #   InputArtifacts: 
+                #   -
+                #     Name: sample-app-build
+                #   Configuration: 
+                #     # ProjectName: !Ref AppCodeBuildProject
+                #     ActionMode: CHANGE_SET_REPLACE
+                #     Capabilities: CAPABILITY_NAMED_IAM
+                #     ChangeSetName: pipeline-changeset
+                #     StackName: !Join
+                #                 - ''
+                #                 - - !Ref LambdaStackName
+                #                   - -DEV
+                #     TemplatePath: sample-app-build::packaged-template.yaml
+                #     RoleArn: !GetAtt CodePipelineServiceRole.Arn
+                #   RunOrder: 1
+                #   Name: CreateUpdateStack
                 - ActionTypeId: 
                     Category: Deploy 
                     Owner: AWS
@@ -138,11 +166,15 @@ Resources:
                     ActionMode: CHANGE_SET_REPLACE
                     Capabilities: CAPABILITY_NAMED_IAM
                     ChangeSetName: pipeline-changeset
-                    StackName: !Ref LambdaStackName
+                    StackName: !Join
+                                - ''
+                                - - !Ref LambdaStackName
+                                  - -DEV
                     TemplatePath: sample-app-build::packaged-template.yaml
                     RoleArn: !GetAtt CodePipelineServiceRole.Arn
                   RunOrder: 1
-                  Name: GenerateChangeSet
+                  Name: Generate-Change-Set-To-Dev
+                  # OutputArtifacts: packaged-template
                 - ActionTypeId:
                     Category: Deploy 
                     Owner: AWS
@@ -151,7 +183,65 @@ Resources:
                   Configuration:
                     ActionMode: CHANGE_SET_EXECUTE
                     ChangeSetName: pipeline-changeset
-                    StackName: !Ref LambdaStackName
+                    StackName: !Join
+                                - ''
+                                - - !Ref LambdaStackName
+                                  - -DEV
                   RunOrder: 2
-                  Name: ExecuteChangeSet
-            
+                  Name: Execute-Change-Set-To-Dev
+          - 
+            Name: Review 
+            Actions:
+              - 
+                Name: Review-Changes
+                ActionTypeId: 
+                  Category: Approval 
+                  Owner: AWS
+                  Version: 1 
+                  Provider: Manual
+                Configuration: 
+                  CustomData: Review changes for PROD deployments
+                  NotificationArn: !Ref ApprovalSNSTopic
+                RunOrder: 1
+          -
+            Name: Deploy-Prod
+            Actions:
+              - ActionTypeId: 
+                  Category: Deploy 
+                  Owner: AWS
+                  Version: 1 
+                  Provider: CloudFormation
+                InputArtifacts: 
+                -
+                  Name: sample-app-build
+                Configuration: 
+                  # ProjectName: !Ref AppCodeBuildProject
+                  ActionMode: CHANGE_SET_REPLACE
+                  Capabilities: CAPABILITY_NAMED_IAM
+                  ChangeSetName: pipeline-changeset
+                  StackName: !Join
+                              - ''
+                              - - !Ref LambdaStackName
+                                - -PROD
+                  TemplatePath: sample-app-build::packaged-template.yaml
+                  RoleArn: !GetAtt CodePipelineServiceRole.Arn
+                  ParameterOverrides: |
+                    {
+                      "Environment" : "prod"
+                    }
+                RunOrder: 1
+                Name: Generate-Change-Set-To-PROD
+              - ActionTypeId:
+                  Category: Deploy 
+                  Owner: AWS
+                  Version: 1 
+                  Provider: CloudFormation
+                Configuration:
+                  ActionMode: CHANGE_SET_EXECUTE
+                  ChangeSetName: pipeline-changeset
+                  StackName: !Join
+                              - ''
+                              - - !Ref LambdaStackName
+                                - -PROD
+                RunOrder: 2
+                Name: Execute-Change-Set-to-PROD

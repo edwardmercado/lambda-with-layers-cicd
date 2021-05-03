@@ -29,4 +29,8 @@ Outputs:
     SampleFunctionName:
         Value: !Ref SampleFunction
         Export:
-            Name: SampleFunctionNameExport
+            Name: !Join
+                    - ''
+                    - - SampleFunctionNameExport
+                      - !Ref Environment
+                    

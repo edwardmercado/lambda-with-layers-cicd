@@ -3,7 +3,6 @@ Description: "Test for Lambda Layers"
 Transform: 'AWS::Serverless-2016-10-31'
 
 Resources:
-
     FunctionLayer:
         Type: AWS::Serverless::LayerVersion
         Properties:

@@ -17,7 +17,7 @@ phases:
       - echo Entered the pre build phase...
       - npm prune
       - ls -lat
-      # - [ -d "dependencies/nodejs" ] &&  rm -rf dependencies/nodejs
+      # - if [ -d "dependencies/nodejs" ] &&  rm -rf dependencies/nodejs
       - mkdir -p dependencies/nodejs
       - cd functions/sample-function
       - ls -lat
