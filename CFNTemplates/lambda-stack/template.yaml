@@ -20,7 +20,7 @@ Resources:
             CodeUri: "../../functions/sample-function"
             Handler: app.handler
             Layers:
-                - !ImportValue FunctionLayerNameExport
+                - !Ref FunctionLayer
             # AutoPublishAlias: !Ref Environment
             # DeploymentPreference:
             #     Type: Canary10Percent5Minutes
