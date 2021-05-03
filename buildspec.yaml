@@ -36,9 +36,9 @@ phases:
       - echo Build started on `date`
       
       #package layers
-      - sam package --template-file ../../CFNTemplates/lambda-layer-stack/template.yaml --output-template-file ../../CFNTemplates/lambda-layer-stack/packaged-template.yaml --region ap-southeast-1 --resolve-s3
-      #deploy layers
-      - sam deploy --template-file ../../CFNTemplates/lambda-layer-stack/packaged-template.yaml --stack-name samplelambdalayer --capabilities CAPABILITY_IAM --region ap-southeast-1
+      # - sam package --template-file ../../CFNTemplates/lambda-layer-stack/template.yaml --output-template-file ../../CFNTemplates/lambda-layer-stack/packaged-template.yaml --region ap-southeast-1 --resolve-s3
+      # #deploy layers
+      # - sam deploy --template-file ../../CFNTemplates/lambda-layer-stack/packaged-template.yaml --stack-name samplelambdalayer --capabilities CAPABILITY_IAM --region ap-southeast-1
       
       #package lambda function
       - sam package --template-file ../../CFNTemplates/lambda-stack/template.yaml --output-template-file ../../CFNTemplates/lambda-stack/packaged-template.yaml --region ap-southeast-1 --resolve-s3 

@@ -21,16 +21,25 @@ Resources:
             Handler: app.handler
             Layers:
                 - !ImportValue FunctionLayerNameExport
-            AutoPublishAlias: !Ref Environment
-            DeploymentPreference:
-                Type: Canary10Percent5Minutes
+            # AutoPublishAlias: !Ref Environment
+            # DeploymentPreference:
+            #     Type: Canary10Percent5Minutes
+            
+    FunctionLayer:
+        Type: AWS::Serverless::LayerVersion
+        Properties:
+            LayerName: sample-app-dependencies
+            ContentUri: "../../dependencies"
+            CompatibleRuntimes:
+                - nodejs10.x
+            LicenseInfo: MIT
 
-Outputs:
-    SampleFunctionName:
-        Value: !Ref SampleFunction
-        Export:
-            Name: !Join
-                    - ''
-                    - - SampleFunctionNameExport
-                      - !Ref Environment
+# Outputs:
+#     # SampleFunctionName:
+#     #     Value: !Ref SampleFunction
+#     #     Export:
+#     #         Name: !Join
+#     #                 - ''
+#     #                 - - SampleFunctionNameExport
+#     #                   - !Ref Environment
                     
