@@ -182,7 +182,7 @@ Resources:
                     Provider: CloudFormation
                   Configuration:
                     ActionMode: CHANGE_SET_EXECUTE
-                    ChangeSetName: pipeline-changeset
+                    ChangeSetName: pipeline-changeset-dev
                     StackName: !Join
                                 - ''
                                 - - !Ref LambdaStackName
@@ -238,7 +238,7 @@ Resources:
                   Provider: CloudFormation
                 Configuration:
                   ActionMode: CHANGE_SET_EXECUTE
-                  ChangeSetName: pipeline-changeset
+                  ChangeSetName: pipeline-changeset-prod
                   StackName: !Join
                               - ''
                               - - !Ref LambdaStackName

@@ -154,7 +154,7 @@ Resources:
             Provider: CloudFormation
           Configuration:
             ActionMode: CHANGE_SET_EXECUTE
-            ChangeSetName: pipeline-changeset
+            ChangeSetName: pipeline-changeset-dev
             StackName:
               Fn::Join:
               - ''
@@ -208,7 +208,7 @@ Resources:
             Provider: CloudFormation
           Configuration:
             ActionMode: CHANGE_SET_EXECUTE
-            ChangeSetName: pipeline-changeset
+            ChangeSetName: pipeline-changeset-prod
             StackName:
               Fn::Join:
               - ''
