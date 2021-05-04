@@ -93,17 +93,13 @@ Resources:
             Category: Source
             Owner: AWS
             Version: '1'
-            Provider: CodeStarSourceConnection
+            Provider: CodeCommit
           OutputArtifacts:
           - Name: sample-app
           Configuration:
-            ConnectionArn:
-              Fn::GetAtt:
-              - CodeStarConnection
-              - ConnectionArn
-            FullRepositoryId: edwardmercado/test
+            RepositoryName: test
             BranchName: main
-            OutputArtifactFormat: CODEBUILD_CLONE_REF
+            PollForSourceChanges: true
           RunOrder: 1
       - Name: Build
         Actions:

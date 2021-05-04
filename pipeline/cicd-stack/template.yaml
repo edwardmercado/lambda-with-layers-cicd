@@ -102,7 +102,6 @@ Resources:
                     Name: sample-app
                 Configuration: 
                   RepositoryName: test
-                  FullRepositoryId: edwardmercado/test
                   BranchName: main
                   PollForSourceChanges: true
                 RunOrder: 1 
