@@ -1,5 +1,6 @@
-# Lambda Layer CICD
+# Lambda CICD
 
+- [x] Resolve dependencies using Lambda Layers
 - [x] multi env deployments
 - [x] approval stage
 - [x] Mirroring from Github to CodeCommit
