@@ -16,7 +16,7 @@
 - GitHub Repository
 - CodeCommit Repository
 
-## How to deploy: (TBA)
+## How to deploy: (TBA - work still in-progress)
 
 - ` cd pipeline\cicd-stack `
 -  run the ` command.sh ` or copy and paste the command writen there on your CLI 
